@@ -59,7 +59,8 @@ app.post("/register", async(req, res) => {
 
 
 
-app.post("/login", (res, req) => {
+app.post("/login", (req, res) => {
+    console.log(req.body);
     const {username, password} = req.body;
 
     db.get(
@@ -79,5 +80,15 @@ app.post("/login", (res, req) => {
         }
     );
 })
+
+
+app.get("/admin/users", (req, res) => {
+    db.all("SELECT id, username FROM users", [], (err, rows) => {
+        if (err) {
+            return res.json({ success: false, error: err.message });
+        }
+        res.json(rows); // send all users as JSON
+    });
+});
 
 app.listen(3000, () => console.log("server running at http://localhost:3000"));
